@@ -50,9 +50,30 @@ if __name__ == "__main__":
     creds.guess(lp)
 
     from dialogs import GPMC, GPME
-    from yast import UISequencer
-    s = UISequencer(lp, creds)
+    from mmc import MMC
     funcs = [(lambda lp, creds: GPMC(lp, creds).Show()),
              (lambda gpo, lp, creds: GPME(gpo, lp, creds).Show())]
-    s.run(funcs)
+
+    MMC.CreateDialog()
+    func_n = 0
+    cli_args = (lp, creds)
+    while True:
+        ret = funcs[func_n](*cli_args)
+        if type(ret) is tuple:
+            data, ret = ret
+            cli_args = (data,) + cli_args
+        if str(ret) == 'next':
+            if func_n < len(funcs):
+                func_n += 1
+                continue
+            else:
+                break
+        elif str(ret) == 'back' and func_n > 0:
+            func_n -= 1
+            cli_args = cli_args[1:]
+            continue
+        elif str(ret) == 'abort':
+            break
+
+    MMC.CloseDialog()
 

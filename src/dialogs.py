@@ -3,6 +3,7 @@
 from defaults import Policies, fetch_inf_value
 from complex import GPConnection, GPOConnection
 from yast import *
+from mmc import MMC
 import re
 
 class GPME:
@@ -13,8 +14,8 @@ class GPME:
     def Show(self):
         if not self.conn:
             return Symbol('back')
-        Wizard.SetContentsButtons('Group Policy Management Editor', self.__gpme_page(), 'Group Policy Management Editor', 'Back', 'Close')
-        Wizard.DisableAbortButton()
+        MMC.SetPlugin('Group Policy Management Editor', self.__gpme_page())
+        MMC.DisableAbortButton()
         UI.SetFocus('gpme_tree')
 
         policy = None
@@ -267,16 +268,35 @@ class GPMC:
         return selected_gpo
 
     def Show(self):
-        Wizard.SetContentsButtons('Group Policy Management Console', self.__gpmc_page(), self.__help(), 'Back', 'Edit GPO')
-        Wizard.DisableBackButton()
-        Wizard.DisableNextButton()
+        MMC.SetPlugin('Group Policy Management Console', self.__gpmc_page())
+        MMC.AddMenu(
+            MenuButton('File', [
+                Item(Id('abort'), 'Exit'),
+            ]),
+            MenuButton('Action', [
+                Item(Id('action_add_forest'), 'Add Forest...'),
+                Item(Id('action_refresh'), 'Refresh'),
+                Item(Id('action_help'), 'Help'),
+            ]),
+            MenuButton('View', [
+                Item(Id('view_options'), 'Options'),
+                Item(Id('view_customize'), 'Customize...'),
+            ]),
+            MenuButton('Help', [
+                Item(Id('help_topics'), 'Help Topics'),
+                Item(Id('help_about'), 'About Group Policy Management...'),
+            ]),
+        )
+        MMC.DisableBackButton()
+        MMC.DisableNextButton()
         UI.SetFocus('gpmc_tree')
 
         current_page = 'Domains'
         old_gpo_guid = None
         gpo_guid = None
         while True:
-            ret = UI.UserInput()
+            ret = UI.WaitForEvent()
+            ret = ret['ID']
             old_gpo_guid = gpo_guid
             gpo_guid = UI.QueryWidget('gpmc_tree', 'CurrentItem')
             if str(ret) in ['back', 'abort']:
@@ -295,17 +315,17 @@ class GPMC:
                         self.gpos = self.q.gpo_list()
                     except:
                         self.gpos = []
-                    Wizard.SetContentsButtons('Group Policy Management Console', self.__gpmc_page(), self.__help(), 'Back', 'Edit GPO')
+                    MMC.SetPlugin('Group Policy Management Console', self.__gpmc_page())
                     break
             elif UI.HasSpecialWidget('DumbTab'):
                 if gpo_guid == 'Domains':
                     if current_page != None:
-                        Wizard.DisableNextButton()
+                        MMC.DisableNextButton()
                         UI.ReplaceWidget('rightPane', Empty())
                         current_page = None
                 elif gpo_guid == self.realm:
                     if current_page != 'Realm':
-                        Wizard.DisableNextButton()
+                        MMC.DisableNextButton()
                         UI.ReplaceWidget('rightPane', self.__realm())
                         current_page = 'Realm'
                 else:
@@ -313,7 +333,7 @@ class GPMC:
                         self.__gpo_tab_adv(gpo_guid)
                         continue
                     if current_page != 'Dumbtab' or old_gpo_guid != gpo_guid:
-                        Wizard.EnableNextButton()
+                        MMC.EnableNextButton()
                         self.selected_gpo = self.__select_gpo(gpo_guid)
                         UI.ReplaceWidget('rightPane', self.__gpo_tab(gpo_guid))
                         current_page = 'Dumbtab'
@@ -406,7 +426,7 @@ class GPMC:
         for gpo in self.gpos:
             items.append(Item(Id(gpo[1]['name'][-1]), gpo[1]['displayName'][-1]))
         forest = [Item('Domains', True, [Item(self.realm, True, items)])]
-        contents = Tree(Id('gpmc_tree'), Opt('notify'), 'Group Policy Management', forest)
+        contents = Tree(Id('gpmc_tree'), Opt('notify', 'notifyContextMenu'), 'Group Policy Management', forest)
         
         return contents
 
