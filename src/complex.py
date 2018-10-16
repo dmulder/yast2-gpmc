@@ -1,8 +1,9 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
+import six
 import ldap, ldap.modlist, ldap.sasl
 from samba import smb
-from configparser import ConfigParser
-from io import StringIO
+from six.moves.configparser import ConfigParser
+from six import StringIO
 import xml.etree.ElementTree as etree
 import os.path, sys
 from samba.net import Net
