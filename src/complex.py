@@ -1,6 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import ldap, ldap.modlist, ldap.sasl
-from samba import smb
+from samba.samba3 import libsmb_samba_internal as smb
 import six
 if six.PY3:
     def ConfigParser(**kwargs):
@@ -463,7 +463,7 @@ class GPOConnection(GPConnection):
         self.realm_dn = self.realm_to_dn(self.realm)
         self.gpo_dn = 'CN=%s,CN=Policies,CN=System,%s' % (self.name, self.realm_dn)
         try:
-            self.conn = smb.SMB(self.dc_hostname, service, lp=self.lp, creds=self.creds)
+            self.conn = smb.Conn(self.dc_hostname, service, lp=self.lp, creds=self.creds, sign=True)
         except Exception as e:
             ycpbuiltins.y2error(traceback.format_exc())
             ycpbuiltins.y2error("Exception %s"%str(e))
