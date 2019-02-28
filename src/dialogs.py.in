@@ -670,23 +670,23 @@ class GPMC:
                         UI.ReplaceWidget(Id('realm_tabContainer'), self.__realm_delegation())
                     elif ret == 'Group Policy Inheritance':
                         UI.ReplaceWidget(Id('realm_tabContainer'), self.__realm_inheritance())
-                    if event['EventReason'] == 'SelectionChanged':
+                    if 'EventReason' in event and event['EventReason'] == 'SelectionChanged':
                         self.__objs_menus(gpo_guid)
                 elif gpo_guid == 'Group Policy Objects':
                     if current_page != 'Group Policy Objects':
                         Wizard.DisableNextButton()
                         UI.ReplaceWidget('rightPane', Empty())
                         current_page = 'Group Policy Objects'
-                    if event['EventReason'] == 'SelectionChanged':
+                    if 'EventReason' in event and event['EventReason'] == 'SelectionChanged':
                         self.__objs_menus()
                 elif gpo_guid.lower().startswith('ou='):
                     UI.ReplaceWidget('rightPane', self.__container(gpo_guid))
                     current_page = None
-                    if event['EventReason'] == 'SelectionChanged':
+                    if 'EventReason' in event and event['EventReason'] == 'SelectionChanged':
                         self.__objs_menus(gpo_guid)
                 else:
                     parent = UI.QueryWidget('gpmc_tree', 'CurrentBranch')[-2]
-                    if event['EventReason'] == 'SelectionChanged':
+                    if 'EventReason' in event and event['EventReason'] == 'SelectionChanged':
                         if parent != 'Group Policy Objects' and parent != self.realm_dn:
                             self.__gpo_menus(parent)
                         else:
