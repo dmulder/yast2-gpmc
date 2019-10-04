@@ -136,6 +136,137 @@ def smb_connection(dc_hostname, service, lp, creds, sign=False):
 # The samba-tool smb_connection function doesn't handle a missing smb.conf
 gpo.smb_connection = smb_connection
 
+def cn_from_wellknown_sid(sid):
+    if sid == security.SID_AUTHENTICATION_AUTHORITY_ASSERTED_IDENTITY:
+        return 'Authentication Authority Asserted Identity'
+    elif sid == security.SID_BUILTIN:
+        return 'Builtin'
+    elif sid == security.SID_BUILTIN_ACCOUNT_OPERATORS:
+        return 'Builtin Account Operators'
+    elif sid == security.SID_BUILTIN_ADMINISTRATORS:
+        return 'Builtin Administrators'
+    elif sid == security.SID_BUILTIN_AUTH_ACCESS:
+        return 'Builtin Auth Access'
+    elif sid == security.SID_BUILTIN_BACKUP_OPERATORS:
+        return 'Builtin Backup Operators'
+    elif sid == security.SID_BUILTIN_CERT_SERV_DCOM_ACCESS:
+        return 'Builtin Cert Serv Dcom Access'
+    elif sid == security.SID_BUILTIN_CRYPTO_OPERATORS:
+        return 'Builtin Crypto Operators'
+    elif sid == security.SID_BUILTIN_DISTRIBUTED_COM_USERS:
+        return 'Builtin Distributed Com Users'
+    elif sid == security.SID_BUILTIN_EVENT_LOG_READERS:
+        return 'Builtin Event Log Readers'
+    elif sid == security.SID_BUILTIN_GUESTS:
+        return 'Builtin Guests'
+    elif sid == security.SID_BUILTIN_INCOMING_FOREST_TRUST:
+        return 'Builtin Incoming Forest Trust'
+    elif sid == security.SID_BUILTIN_NETWORK_CONF_OPERATORS:
+        return 'Builtin Network Conf Operators'
+    elif sid == security.SID_BUILTIN_PERFLOG_USERS:
+        return 'Builtin Perflog Users'
+    elif sid == security.SID_BUILTIN_PERFMON_USERS:
+        return 'Builtin Perfmon Users'
+    elif sid == security.SID_BUILTIN_POWER_USERS:
+        return 'Builtin Power Users'
+    elif sid == security.SID_BUILTIN_PREW2K:
+        return 'Builtin Prew2k'
+    elif sid == security.SID_BUILTIN_PRINT_OPERATORS:
+        return 'Builtin Print Operators'
+    elif sid == security.SID_BUILTIN_RAS_SERVERS:
+        return 'Builtin Ras Servers'
+    elif sid == security.SID_BUILTIN_REMOTE_DESKTOP_USERS:
+        return 'Builtin Remote Desktop Users'
+    elif sid == security.SID_BUILTIN_REPLICATOR:
+        return 'Builtin Replicator'
+    elif sid == security.SID_BUILTIN_SERVER_OPERATORS:
+        return 'Builtin Server Operators'
+    elif sid == security.SID_BUILTIN_TS_LICENSE_SERVERS:
+        return 'Builtin Ts License Servers'
+    elif sid == security.SID_BUILTIN_USERS:
+        return 'Builtin Users'
+    elif sid == security.SID_CREATOR_GROUP:
+        return 'Creator Group'
+    elif sid == security.SID_CREATOR_OWNER:
+        return 'Creator Owner'
+    elif sid == security.SID_CREATOR_OWNER_DOMAIN:
+        return 'Creator Owner Domain'
+    elif sid == security.SID_NT_ANONYMOUS:
+        return 'Anonymous'
+    elif sid == security.SID_NT_AUTHENTICATED_USERS:
+        return 'Authenticated Users'
+    elif sid == security.SID_NT_AUTHORITY:
+        return 'Authority'
+    elif sid == security.SID_NT_BATCH:
+        return 'Batch'
+    elif sid == security.SID_NT_DIALUP:
+        return 'Dialup'
+    elif sid == security.SID_NT_DIGEST_AUTHENTICATION:
+        return 'Digest Authentication'
+    elif sid == security.SID_NT_ENTERPRISE_DCS:
+        return 'ENTERPRISE DOMAIN CONTROLLERS'
+    elif sid == security.SID_NT_INTERACTIVE:
+        return 'Interactive'
+    elif sid == security.SID_NT_IUSR:
+        return 'Iusr'
+    elif sid == security.SID_NT_LOCAL_SERVICE:
+        return 'Local Service'
+    elif sid == security.SID_NT_NETWORK:
+        return 'Network'
+    elif sid == security.SID_NT_NETWORK_SERVICE:
+        return 'Network Service'
+    elif sid == security.SID_NT_NFS_GROUP:
+        return 'NFS Group'
+    elif sid == security.SID_NT_NFS_MASK:
+        return 'NFS Mask'
+    elif sid == security.SID_NT_NFS_OTHERS:
+        return 'NFS Others'
+    elif sid == security.SID_NT_NFS_SUBSYSTEM:
+        return 'NFS Subsystem'
+    elif sid == security.SID_NT_NFS_USER:
+        return 'NFS User'
+    elif sid == security.SID_NT_NTLM_AUTHENTICATION:
+        return 'Ntlm Authentication'
+    elif sid == security.SID_NT_NT_SERVICE:
+        return 'NT Service'
+    elif sid == security.SID_NT_OTHER_ORGANISATION:
+        return 'Other Organisation'
+    elif sid == security.SID_NT_PROXY:
+        return 'Proxy'
+    elif sid == security.SID_NT_REMOTE_INTERACTIVE:
+        return 'Remote Interactive'
+    elif sid == security.SID_NT_RESTRICTED:
+        return 'Restricted'
+    elif sid == security.SID_NT_SCHANNEL_AUTHENTICATION:
+        return 'Schannel Authentication'
+    elif sid == security.SID_NT_SELF:
+        return 'Self'
+    elif sid == security.SID_NT_SERVICE:
+        return 'Service'
+    elif sid == security.SID_NT_SYSTEM:
+        return 'SYSTEM'
+    elif sid == security.SID_NT_TERMINAL_SERVER_USERS:
+        return 'Terminal Server Users'
+    elif sid == security.SID_NT_THIS_ORGANISATION:
+        return 'This Organisation'
+    elif sid == security.SID_NT_TRUSTED_INSTALLER:
+        return 'Trusted Installer'
+    elif sid == security.SID_NULL:
+        return 'Null'
+    elif sid == security.SID_OWNER_RIGHTS:
+        return 'Owner Rights'
+    elif sid == security.SID_SAMBA_UNIX_GROUP_OWNER:
+        return 'Samba Unix Group Owner'
+    elif sid == security.SID_SAMBA_UNIX_USER_OWNER:
+        return 'Samba Unix User Owner'
+    elif sid == security.SID_SERVICE_ASSERTED_IDENTITY:
+        return 'Service Asserted Identity'
+    elif sid == security.SID_WORLD:
+        return 'World'
+    elif sid == security.SID_WORLD_DOMAIN:
+        return 'World Domain'
+    return None
+
 class GPConnection(Ldap):
     def __init__(self, lp, creds):
         super().__init__(lp, creds)
@@ -161,16 +292,36 @@ class GPConnection(Ldap):
 
         return stringify_ldap(res)
 
-    def user_from_sid(self, sid, attrs=[]):
-        res = self.ldap_search(self.__well_known_container('users'), SCOPE_SUBTREE, '(objectSID=%s)' % sid, stringify_ldap(attrs))
-        return res[0][1]
+    def gpo_security_filter(self, gpo_guid, apply_list=False):
+        msg = self.gpo_list(guid=gpo_guid, attrs=['nTSecurityDescriptor'])
+        ds_sd_ndr = msg[0][1]['nTSecurityDescriptor'][0]
+        ds_sd = ndr_unpack(security.descriptor, ds_sd_ndr)
+        names = []
+        for ace in ds_sd.dacl.aces:
+            if apply_list and not ace.access_mask & security.SEC_ADS_CONTROL_ACCESS:
+                continue
+            name = cn_from_wellknown_sid(str(ace.trustee))
+            if not name:
+                msg = self.user_from_sid(str(ace.trustee), attrs=['cn'])
+                if 'cn' in msg:
+                    name = msg['cn'][0].decode()
+            if not name:
+                name = str(ace.trustee)
+            names.append((str(ace.trustee), name))
+        return sorted(set(names), key=lambda f: f[1])
 
-    def gpo_list(self, displayName=None, attrs=[]):
+    def user_from_sid(self, sid, attrs=[]):
+        res = self.ldap_search(self.realm_to_dn(self.realm), SCOPE_SUBTREE, '(objectSID=%s)' % sid, stringify_ldap(attrs))
+        return res[0][1] if len(res) > 0 and len(res[0]) > 0 else {}
+
+    def gpo_list(self, displayName=None, guid=None, attrs=[]):
         result = None
         res = self.__well_known_container('system')
         search_expr = '(objectClass=groupPolicyContainer)'
         if displayName is not None:
             search_expr = '(&(objectClass=groupPolicyContainer)(displayname=%s))' % ldb.binary_encode(displayName)
+        elif guid:
+            search_expr = '(&(objectClass=groupPolicyContainer)(cn=%s))' % ldb.binary_encode(guid)
         result = self.ldap_search(res, SCOPE_SUBTREE, search_expr, stringify_ldap(attrs))
         result = stringify_ldap(result)
         return result

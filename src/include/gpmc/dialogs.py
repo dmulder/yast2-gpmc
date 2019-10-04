@@ -685,7 +685,7 @@ class GPMC:
                         self.__objs_menus(gpo_guid)
                 else:
                     parent = UI.QueryWidget('gpmc_tree', 'CurrentBranch')[-2]
-                    if event['EventReason'] == 'SelectionChanged':
+                    if 'EventReason' in event and event['EventReason'] == 'SelectionChanged':
                         if parent != 'Group Policy Objects' and parent != self.realm_dn:
                             self.__gpo_menus(parent)
                         else:
@@ -778,9 +778,14 @@ class GPMC:
             gplist = parse_gplink(link['gPLink'][-1])[gpo_guid]
             vals = Item(name, str(gplist['enforced']), str(gplist['enabled']), dn_to_path(self.realm.lower(), link['distinguishedName'][-1]))
             contents.append(vals)
+        sec_contents = [Item(Id(name[0]), name[1]) for name in self.q.gpo_security_filter(gpo_guid, True)]
         return VBox(
             Left(Label('Links')),
-            Table(Id('scope_links'), header, contents)
+            Left(Label('The following sites, domains, and OUs are linked to this GPO:')),
+            Table(Id('scope_links'), header, contents),
+            Left(Label('Security Filtering')),
+            Left(Label('The settings in this GPO can only apply to the following groups, users, and computers:')),
+            Table(Id('sec_filter'), Header('Name'), sec_contents),
         )
 
     def __ms_time_to_readable(self, timestamp):
